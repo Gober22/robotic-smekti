@@ -242,6 +242,13 @@
             height: 200%;
             background: radial-gradient(circle, rgba(0, 212, 255, 0.05) 0%, transparent 70%);
             animation: rotate 30s linear infinite;
+            pointer-events: none; /* Fix: memastikan background tidak menghalangi input */
+            z-index: 0;
+        }
+
+        .form-card > * {
+            position: relative;
+            z-index: 1; /* Fix: memastikan konten form di atas background */
         }
 
         @keyframes rotate {
@@ -253,6 +260,8 @@
         .form-section {
             display: none;
             animation: fadeIn 0.5s ease;
+            position: relative;
+            z-index: 1; /* Fix: memastikan form section di atas background */
         }
 
         .form-section.active {
@@ -271,6 +280,8 @@
             padding: 12px;
             border-radius: 10px;
             transition: all 0.3s ease;
+            position: relative;
+            z-index: 2; /* Fix: memastikan input fields dapat diakses */
         }
 
         .form-control:focus, .form-select:focus {
@@ -278,6 +289,13 @@
             border-color: var(--primary-color);
             color: var(--text-light);
             box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+            outline: none; /* Fix: menghilangkan outline default */
+        }
+
+        /* Fix untuk option di select */
+        .form-select option {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
         }
 
         .form-label {
