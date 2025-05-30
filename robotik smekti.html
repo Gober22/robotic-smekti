@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robotik SMEKTI - Ekstrakurikuler Robotika</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #00d4ff;
+            --secondary-color: #ff6b6b;
+            --dark-bg: #0a0e27;
+            --light-bg: #1a1f3a;
+            --text-light: #ffffff;
+            --text-gray: #b8bcc8;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .hero-section {
+            position: relative;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0a0e27 100%);
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(0, 212, 255, 0.05) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(100vh) translateX(0);
+            }
+            to {
+                transform: translateY(-10vh) translateX(100px);
+            }
+        }
+
+        /* Navigation */
+        .navbar {
+            background-color: rgba(26, 31, 58, 0.95) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 212, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: var(--primary-color) !important;
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--text-light) !important;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+
+        .navbar-nav .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Content */
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding-top: 150px;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+            }
+            to {
+                text-shadow: 0 0 30px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.6);
+            }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-gray);
+            margin-bottom: 30px;
+        }
+
+        .btn-cyber {
+            background: linear-gradient(45deg, var(--primary-color), #0099cc);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            font-weight: bold;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-cyber:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+            color: white;
+        }
+
+        .btn-cyber::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-cyber:hover::before {
+            left: 100%;
+        }
+
+        /* Robot Animation */
+        .robot-container {
+            position: relative;
+            animation: hover 3s ease-in-out infinite;
+        }
+
+        @keyframes hover {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .robot-img {
+            width: 100%;
+            max-width: 500px;
+            filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.5));
+        }
+
+        /* Section Styles */
+        .section-title {
+            font-size: 3rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            color: var(--primary-color);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+        }
+
+        /* Cards */
+        .competition-card {
+            background: var(--light-bg);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .competition-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .competition-card:hover::before {
+            opacity: 1;
+        }
+
+        .competition-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-color);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.2);
+        }
+
+        .competition-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        /* Gallery */
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        /* Form */
+        .form-control, .form-select {
+            background-color: var(--light-bg);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            color: var(--text-light);
+            padding: 12px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: var(--light-bg);
+            border-color: var(--primary-color);
+            color: var(--text-light);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+        }
+
+        .form-label {
+            color: var(--text-gray);
+            margin-bottom: 10px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--light-bg);
+            padding: 50px 0 30px;
+            margin-top: 100px;
+            border-top: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .social-links a {
+            color: var(--text-gray);
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(0, 212, 255, 0.3);
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#home">
+                <i class="bi bi-robot"></i> ROBOTIK SMEKTI
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">Beranda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">Tentang</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#competitions">Kompetisi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#gallery">Galeri</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#register">Daftar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Kontak</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="particles" id="particles"></div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="row align-items-center min-vh-100">
+                    <div class="col-lg-6" data-aos="fade-right">
+                        <h1 class="hero-title">ROBOTIK SMEKTI</h1>
+                        <p class="hero-subtitle">Wujudkan Inovasi, Ciptakan Masa Depan</p>
+                        <p class="lead mb-4">Bergabunglah dengan kami dalam mengeksplorasi dunia robotika melalui berbagai kompetisi bergengsi seperti LKS, Mobile Robotik, Sumo Robot, Line Follower, dan masih banyak lagi!</p>
+                        <div class="d-flex flex-wrap gap-3">
+                            <a href="pendaftaran.html" class="btn btn-cyber btn-lg">
+                                <i class="bi bi-person-plus"></i> Daftar Sekarang
+                            </a>
+                            <a href="#competitions" class="btn btn-outline-light btn-lg">
+                                <i class="bi bi-trophy"></i> Lihat Kompetisi
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6" data-aos="fade-left">
+                        <div class="robot-container text-center">
+                            <svg class="robot-img" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Robot Body -->
+                                <rect x="100" y="150" width="200" height="150" rx="20" fill="#00d4ff" opacity="0.8"/>
+                                <rect x="120" y="170" width="160" height="110" rx="10" fill="#0a0e27"/>
+                                
+                                <!-- Robot Head -->
+                                <rect x="140" y="80" width="120" height="80" rx="15" fill="#00d4ff" opacity="0.8"/>
+                                <rect x="155" y="95" width="90" height="50" rx="10" fill="#0a0e27"/>
+                                
+                                <!-- Eyes -->
+                                <circle cx="180" cy="120" r="15" fill="#ff6b6b">
+                                    <animate attributeName="r" values="15;18;15" dur="2s" repeatCount="indefinite"/>
+                                </circle>
+                                <circle cx="220" cy="120" r="15" fill="#ff6b6b">
+                                    <animate attributeName="r" values="15;18;15" dur="2s" repeatCount="indefinite"/>
+                                </circle>
+                                
+                                <!-- Arms -->
+                                <rect x="60" y="180" width="40" height="80" rx="20" fill="#00d4ff" opacity="0.8"/>
+                                <rect x="300" y="180" width="40" height="80" rx="20" fill="#00d4ff" opacity="0.8"/>
+                                
+                                <!-- Antenna -->
+                                <line x1="200" y1="80" x2="200" y2="50" stroke="#00d4ff" stroke-width="4"/>
+                                <circle cx="200" cy="45" r="8" fill="#ff6b6b">
+                                    <animate attributeName="opacity" values="0.5;1;0.5" dur="1s" repeatCount="indefinite"/>
+                                </circle>
+                                
+                                <!-- Circuit Pattern -->
+                                <path d="M140 200 L160 200 L160 220 L180 220 M220 220 L240 220 L240 200 L260 200" 
+                                      stroke="#00d4ff" stroke-width="2" fill="none" opacity="0.6"/>
+                                <circle cx="140" cy="200" r="3" fill="#00d4ff"/>
+                                <circle cx="260" cy="200" r="3" fill="#00d4ff"/>
+                                <circle cx="180" cy="220" r="3" fill="#00d4ff"/>
+                                <circle cx="220" cy="220" r="3" fill="#00d4ff"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-5">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Tentang Kami</h2>
+            <div class="row">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <h3 class="text-primary mb-3">Ekstrakurikuler Robotika SMEKTI</h3>
+                    <p class="lead">Robotik SMEKTI adalah wadah bagi siswa-siswi yang memiliki minat dan bakat dalam bidang robotika dan teknologi.</p>
+                    <p>Kami fokus pada pengembangan keterampilan teknis, kreativitas, dan kemampuan problem solving melalui berbagai project dan kompetisi robotika tingkat regional hingga nasional.</p>
+                    
+                    <div class="mt-4">
+                        <h4 class="text-primary">Visi Kami</h4>
+                        <p>Menjadi ekstrakurikuler robotika terdepan yang melahirkan inovator-inovator muda di bidang teknologi.</p>
+                        
+                        <h4 class="text-primary mt-3">Misi Kami</h4>
+                        <ul>
+                            <li>Mengembangkan kemampuan teknis siswa dalam bidang robotika</li>
+                            <li>Mendorong kreativitas dan inovasi melalui project-based learning</li>
+                            <li>Mempersiapkan siswa untuk kompetisi robotika tingkat nasional</li>
+                            <li>Membangun karakter dan teamwork melalui kolaborasi tim</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6" data-aos="fade-left">
+                    <div class="row g-4">
+                        <div class="col-6">
+                            <div class="text-center p-4 bg-light bg-opacity-10 rounded">
+                                <i class="bi bi-people-fill display-4 text-primary"></i>
+                                <h3 class="mt-3">50+</h3>
+                                <p>Anggota Aktif</p>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-center p-4 bg-light bg-opacity-10 rounded">
+                                <i class="bi bi-trophy-fill display-4 text-warning"></i>
+                                <h3 class="mt-3">25+</h3>
+                                <p>Prestasi</p>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-center p-4 bg-light bg-opacity-10 rounded">
+                                <i class="bi bi-calendar-event display-4 text-success"></i>
+                                <h3 class="mt-3">15+</h3>
+                                <p>Kompetisi/Tahun</p>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-center p-4 bg-light bg-opacity-10 rounded">
+                                <i class="bi bi-cpu display-4 text-info"></i>
+                                <h3 class="mt-3">100+</h3>
+                                <p>Project Selesai</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Competitions Section -->
+    <section id="competitions" class="py-5 bg-dark bg-opacity-50">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Kompetisi Kami</h2>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="competition-card">
+                        <div class="text-center">
+                            <i class="bi bi-phone competition-icon"></i>
+                        </div>
+                        <h4 class="text-center mb-3">LKS Mobile Robotik</h4>
+                        <p>Kompetisi robotika berbasis mobile yang menguji kemampuan programming dan kontrol robot menggunakan smartphone.</p>
+                        <ul>
+                            <li>Programming Android</li>
+                            <li>Sensor Integration</li>
+                            <li>Wireless Control</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="competition-card">
+                        <div class="text-center">
+                            <i class="bi bi-controller competition-icon"></i>
+                        </div>
+                        <h4 class="text-center mb-3">Sumo Robot</h4>
+                        <p>Pertarungan robot satu lawan satu untuk mendorong lawan keluar dari arena. Menguji strategi dan kekuatan robot.</p>
+                        <ul>
+                            <li>Mechanical Design</li>
+                            <li>Sensor Strategy</li>
+                            <li>Power Management</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="competition-card">
+                        <div class="text-center">
+                            <i class="bi bi-bezier2 competition-icon"></i>
+                        </div>
+                        <h4 class="text-center mb-3">Line Follower</h4>
+                        <p>Robot otomatis yang mengikuti jalur dengan kecepatan dan akurasi tinggi. Klasik namun menantang!</p>
+                        <ul>
+                            <li>PID Control</li>
+                            <li>Sensor Calibration</li>
+                            <li>Speed Optimization</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="competition-card">
+                        <div class="text-center">
+                            <i class="bi bi-broadcast competition-icon"></i>
+                        </div>
+                        <h4 class="text-center mb-3">Ultrasonic Challenge</h4>
+                        <p>Navigasi robot menggunakan sensor ultrasonik untuk menghindari rintangan dan mencapai target.</p>
+                        <ul>
+                            <li>Distance Measurement</li>
+                            <li>Obstacle Avoidance</li>
+                            <li>Path Planning</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+                    <div class="competition-card">
+                        <div class="text-center">
+                            <i class="bi bi-fire competition-icon"></i>
+                        </div>
+                        <h4 class="text-center mb-3">Fire Fighting Robot</h4>
+                        <p>Robot pemadam api otomatis yang mendeteksi dan memadamkan api dalam maze.</p>
+                        <ul>
+                            <li>Flame Detection</li>
+                            <li>Navigation Algorithm</li>
+                            <li>Extinguishing System</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
+                    <div class="competition-card">
+                        <div class="text-center">
+                            <i class="bi bi-box competition-icon"></i>
+                        </div>
+                        <h4 class="text-center mb-3">Transporter Robot</h4>
+                        <p>Robot pengangkut barang otomatis dengan kemampuan sorting dan delivery.</p>
+                        <ul>
+                            <li>Object Recognition</li>
+                            <li>Gripper Design</li>
+                            <li>Route Optimization</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-5">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Galeri Kegiatan</h2>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/400x250/0a0e27/00d4ff?text=LKS+Competition" alt="LKS Competition">
+                        <div class="gallery-overlay">
+                            <h5 class="text-white">LKS Mobile Robotik 2024</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/400x250/1a1f3a/ff6b6b?text=Sumo+Robot" alt="Sumo Robot">
+                        <div class="gallery-overlay">
+                            <h5 class="text-white">Sumo Robot Battle</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/400x250/0a0e27/00d4ff?text=Line+Follower" alt="Line Follower">
+                        <div class="gallery-overlay">
+                            <h5 class="text-white">Line Follower Championship</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="400">
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/400x250/1a1f3a/ff6b6b?text=Workshop" alt="Workshop">
+                        <div class="gallery-overlay">
+                            <h5 class="text-white">Workshop Arduino</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="500">
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/400x250/0a0e27/00d4ff?text=Team+Work" alt="Team Work">
+                        <div class="gallery-overlay">
+                            <h5 class="text-white">Team Building</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="600">
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/400x250/1a1f3a/ff6b6b?text=Awards" alt="Awards">
+                        <div class="gallery-overlay">
+                            <h5 class="text-white">Penghargaan Tim</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Join Us Section -->
+    <section id="register" class="py-5 bg-dark bg-opacity-50">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Bergabung Dengan Kami</h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center" data-aos="fade-up" data-aos-delay="200">
+                    <p class="lead mb-4">Tertarik untuk bergabung dengan Tim Robotik SMEKTI? Ayo daftarkan dirimu sekarang dan jadilah bagian dari keluarga besar kami!</p>
+                    <div class="row g-4 mb-5">
+                        <div class="col-md-4">
+                            <div class="p-4">
+                                <i class="bi bi-calendar-check display-4 text-primary mb-3"></i>
+                                <h5>Jadwal Latihan</h5>
+                                <p>Senin & Kamis<br>15:00 - 17:00 WIB</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-4">
+                                <i class="bi bi-geo-alt display-4 text-info mb-3"></i>
+                                <h5>Lokasi</h5>
+                                <p>Lab Robotika<br>Gedung B Lantai 2</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-4">
+                                <i class="bi bi-people display-4 text-success mb-3"></i>
+                                <h5>Kuota</h5>
+                                <p>Terbatas<br>Max 60 Anggota</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="pendaftaran.html" class="btn btn-cyber btn-lg px-5">
+                        <i class="bi bi-person-plus"></i> Daftar Sekarang
+                    </a>
+                    <p class="mt-3 text-muted">Atau scan QR code untuk info lebih lanjut</p>
+                    <div class="mt-3">
+                        <div class="d-inline-block p-3 bg-white rounded">
+                            <svg width="150" height="150" viewBox="0 0 150 150">
+                                <!-- Simple QR Code representation -->
+                                <rect width="150" height="150" fill="white"/>
+                                <rect x="10" y="10" width="130" height="130" fill="none" stroke="black" stroke-width="2"/>
+                                <rect x="20" y="20" width="30" height="30" fill="black"/>
+                                <rect x="100" y="20" width="30" height="30" fill="black"/>
+                                <rect x="20" y="100" width="30" height="30" fill="black"/>
+                                <rect x="60" y="60" width="30" height="30" fill="black"/>
+                                <rect x="70" y="20" width="10" height="10" fill="black"/>
+                                <rect x="20" y="70" width="10" height="10" fill="black"/>
+                                <rect x="120" y="70" width="10" height="10" fill="black"/>
+                                <rect x="70" y="120" width="10" height="10" fill="black"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-5">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Hubungi Kami</h2>
+            <div class="row g-4">
+                <div class="col-lg-4" data-aos="fade-right">
+                    <div class="text-center p-4">
+                        <i class="bi bi-geo-alt-fill display-4 text-primary mb-3"></i>
+                        <h4>Lokasi</h4>
+                        <p>Lab Robotika SMEKTI<br>Jl. Pendidikan No. 123<br>Kota, Provinsi</p>
+                    </div>
+                </div>
+                <div class="col-lg-4" data-aos="fade-up">
+                    <div class="text-center p-4">
+                        <i class="bi bi-whatsapp display-4 text-success mb-3"></i>
+                        <h4>WhatsApp</h4>
+                        <p>+62 812-3456-7890<br>Senin - Jumat: 14:00 - 17:00</p>
+                    </div>
+                </div>
+                <div class="col-lg-4" data-aos="fade-left">
+                    <div class="text-center p-4">
+                        <i class="bi bi-envelope-fill display-4 text-info mb-3"></i>
+                        <h4>Email</h4>
+                        <p>robotik@smekti.sch.id<br>info.robotiksmekti@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h4 class="text-primary mb-3">ROBOTIK SMEKTI</h4>
+                    <p>Mengembangkan generasi muda yang inovatif dan kreatif melalui teknologi robotika.</p>
+                </div>
+                <div class="col-lg-6 text-lg-end">
+                    <h5 class="mb-3">Follow Us</h5>
+                    <div class="social-links">
+                        <a href="#"><i class="bi bi-instagram"></i></a>
+                        <a href="#"><i class="bi bi-youtube"></i></a>
+                        <a href="#"><i class="bi bi-facebook"></i></a>
+                        <a href="#"><i class="bi bi-tiktok"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4 border-secondary">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2024 Robotik SMEKTI. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // Particles Animation
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Smooth Scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Form Submission
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<div class="spinner-border spinner-border-sm me-2" role="status"></div>Mengirim...';
+            submitBtn.disabled = true;
+            
+            // Simulate form submission
+            setTimeout(() => {
+                // Reset form
+                this.reset();
+                
+                // Show success message
+                document.getElementById('successMessage').classList.remove('d-none');
+                
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    document.getElementById('successMessage').classList.add('d-none');
+                }, 5000);
+            }, 2000);
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.backgroundColor = 'rgba(26, 31, 58, 0.98)';
+                navbar.style.boxShadow = '0 5px 30px rgba(0, 212, 255, 0.3)';
+            } else {
+                navbar.style.backgroundColor = 'rgba(26, 31, 58, 0.95)';
+                navbar.style.boxShadow = '0 2px 20px rgba(0, 212, 255, 0.1)';
+            }
+        });
+
+        // Active nav link
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendaftaran - Robotik SMEKTI</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #00d4ff;
+            --secondary-color: #ff6b6b;
+            --dark-bg: #0a0e27;
+            --light-bg: #1a1f3a;
+            --text-light: #ffffff;
+            --text-gray: #b8bcc8;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Background Animation */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0a0e27 100%),
+                repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(0, 212, 255, 0.03) 20px, rgba(0, 212, 255, 0.03) 40px);
+            opacity: 0.8;
+        }
+
+        .floating-shapes {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+        }
+
+        .shape-1 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
+            top: -150px;
+            right: -150px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .shape-2 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, var(--secondary-color) 0%, transparent 70%);
+            bottom: -100px;
+            left: -100px;
+            animation: float 15s ease-in-out infinite reverse;
+        }
+
+        .shape-3 {
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            animation: pulse 10s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(120deg); }
+            66% { transform: translate(-20px, 20px) rotate(240deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1) translate(-50%, -50%); opacity: 0.1; }
+            50% { transform: scale(1.5) translate(-50%, -50%); opacity: 0.2; }
+        }
+
+        /* Navigation */
+        .navbar {
+            background-color: rgba(26, 31, 58, 0.95) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 212, 255, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: var(--primary-color) !important;
+        }
+
+        .btn-back {
+            color: var(--text-light);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            transform: translateX(-5px);
+        }
+
+        /* Main Content */
+        .registration-container {
+            min-height: 100vh;
+            padding: 100px 0 50px;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            text-align: center;
+            color: var(--text-gray);
+            margin-bottom: 50px;
+            font-size: 1.2rem;
+        }
+
+        /* Progress Steps */
+        .progress-steps {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 25px;
+            left: 25%;
+            right: 25%;
+            height: 2px;
+            background: rgba(0, 212, 255, 0.2);
+            z-index: -1;
+        }
+
+        .progress-line-active {
+            background: var(--primary-color);
+            width: 0;
+            transition: width 0.5s ease;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            margin: 0 30px;
+        }
+
+        .step-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--light-bg);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-circle {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: var(--dark-bg);
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        }
+
+        .step.completed .step-circle {
+            background: var(--secondary-color);
+            border-color: var(--secondary-color);
+            color: white;
+        }
+
+        .step-label {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: var(--text-gray);
+        }
+
+        .step.active .step-label {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        /* Form Card */
+        .form-card {
+            background: var(--light-bg);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.05) 0%, transparent 70%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Form Elements */
+        .form-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-control, .form-select {
+            background-color: rgba(10, 14, 39, 0.5);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            color: var(--text-light);
+            padding: 12px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: rgba(10, 14, 39, 0.7);
+            border-color: var(--primary-color);
+            color: var(--text-light);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+        }
+
+        .form-label {
+            color: var(--text-gray);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .form-label .required {
+            color: var(--secondary-color);
+        }
+
+        /* Radio & Checkbox Custom */
+        .form-check-input {
+            background-color: transparent;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .form-check-label {
+            color: var(--text-gray);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .form-check-label:hover {
+            color: var(--text-light);
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .skill-item {
+            padding: 15px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .skill-item:hover {
+            background: rgba(0, 212, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .skill-item.selected {
+            background: var(--primary-color);
+            color: var(--dark-bg);
+            border-color: var(--primary-color);
+        }
+
+        /* Buttons */
+        .btn-cyber {
+            background: linear-gradient(45deg, var(--primary-color), #0099cc);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            font-weight: bold;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-cyber:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+            color: white;
+        }
+
+        .btn-cyber:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary-custom {
+            background: transparent;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            color: var(--text-light);
+            padding: 12px 30px;
+            font-weight: bold;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary-custom:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        /* Success Message */
+        .success-animation {
+            text-align: center;
+            padding: 50px;
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+
+        .success-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--secondary-color);
+            animation: scaleIn 0.5s ease;
+        }
+
+        .success-checkmark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            stroke: white;
+            stroke-width: 5;
+            fill: none;
+            animation: drawCheck 0.5s ease 0.3s forwards;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        @keyframes drawCheck {
+            from { stroke-dasharray: 50; stroke-dashoffset: 50; }
+            to { stroke-dasharray: 50; stroke-dashoffset: 0; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-title { font-size: 2rem; }
+            .step { margin: 0 15px; }
+            .step-label { font-size: 0.8rem; }
+            .form-card { padding: 25px; }
+            .skills-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Elements -->
+    <div class="bg-pattern"></div>
+    <div class="floating-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-robot"></i> ROBOTIK SMEKTI
+            </a>
+            <a href="index.html" class="btn-back ms-auto">
+                <i class="bi bi-arrow-left"></i> Kembali
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="registration-container">
+        <div class="container">
+            <div data-aos="fade-down">
+                <h1 class="page-title">Pendaftaran Anggota Baru</h1>
+                <p class="page-subtitle">Bergabunglah dengan Tim Robotik SMEKTI dan wujudkan inovasimu!</p>
+            </div>
+
+            <!-- Progress Steps -->
+            <div class="progress-steps" data-aos="fade-up">
+                <div class="progress-line"></div>
+                <div class="progress-line progress-line-active"></div>
+                
+                <div class="step active" id="step1">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Data Diri</div>
+                </div>
+                <div class="step" id="step2">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Minat & Skill</div>
+                </div>
+                <div class="step" id="step3">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Motivasi</div>
+                </div>
+                <div class="step" id="step4">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">Konfirmasi</div>
+                </div>
+            </div>
+
+            <!-- Form Card -->
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="form-card" data-aos="fade-up" data-aos-delay="200">
+                        <form id="registrationForm">
+                            <!-- Step 1: Data Diri -->
+                            <div class="form-section active" id="section1">
+                                <h3 class="mb-4">Data Diri</h3>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="nama" class="form-label">Nama Lengkap <span class="required">*</span></label>
+                                        <input type="text" class="form-control" id="nama" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="nis" class="form-label">NIS <span class="required">*</span></label>
+                                        <input type="text" class="form-control" id="nis" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="kelas" class="form-label">Kelas <span class="required">*</span></label>
+                                        <select class="form-select" id="kelas" required>
+                                            <option value="">Pilih Kelas</option>
+                                            <option value="X">Kelas X</option>
+                                            <option value="XI">Kelas XI</option>
+                                            <option value="XII">Kelas XII</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="jurusan" class="form-label">Jurusan <span class="required">*</span></label>
+                                        <select class="form-select" id="jurusan" required>
+                                            <option value="">Pilih Jurusan</option>
+                                            <option value="TKJ">Teknik Komputer & Jaringan</option>
+                                            <option value="RPL">Rekayasa Perangkat Lunak</option>
+                                            <option value="MM">Multimedia</option>
+                                            <option value="TEI">Teknik Elektronika Industri</option>
+                                            <option value="TOI">Teknik Otomasi Industri</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="email" class="form-label">Email <span class="required">*</span></label>
+                                        <input type="email" class="form-control" id="email" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="whatsapp" class="form-label">No. WhatsApp <span class="required">*</span></label>
+                                        <input type="tel" class="form-control" id="whatsapp" placeholder="08xx-xxxx-xxxx" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="alamat" class="form-label">Alamat Lengkap</label>
+                                        <textarea class="form-control" id="alamat" rows="2"></textarea>
+                                    </div>
+                                </div>
+                                <div class="text-end mt-4">
+                                    <button type="button" class="btn btn-cyber" onclick="nextStep(2)">
+                                        Lanjut <i class="bi bi-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Step 2: Minat & Skill -->
+                            <div class="form-section" id="section2">
+                                <h3 class="mb-4">Minat & Keahlian</h3>
+                                <div class="mb-4">
+                                    <label class="form-label">Pilih kompetisi yang kamu minati <span class="required">*</span></label>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="mobile" value="mobile">
+                                                <label class="form-check-label" for="mobile">
+                                                    <i class="bi bi-phone"></i> Mobile Robotik
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="sumo" value="sumo">
+                                                <label class="form-check-label" for="sumo">
+                                                    <i class="bi bi-controller"></i> Sumo Robot
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="line" value="line">
+                                                <label class="form-check-label" for="line">
+                                                    <i class="bi bi-bezier2"></i> Line Follower
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="ultrasonic" value="ultrasonic">
+                                                <label class="form-check-label" for="ultrasonic">
+                                                    <i class="bi bi-broadcast"></i> Ultrasonic
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="fire" value="fire">
+                                                <label class="form-check-label" for="fire">
+                                                    <i class="bi bi-fire"></i> Fire Fighting
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="transporter" value="transporter">
+                                                <label class="form-check-label" for="transporter">
+                                                    <i class="bi bi-box"></i> Transporter
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label">Skill yang kamu miliki</label>
+                                    <div class="skills-grid">
+                                        <div class="skill-item" onclick="toggleSkill(this)">
+                                            <i class="bi bi-code-slash"></i>
+                                            <div>Programming</div>
+                                        </div>
+                                        <div class="skill-item" onclick="toggleSkill(this)">
+                                            <i class="bi bi-cpu"></i>
+                                            <div>Elektronika</div>
+                                        </div>
+                                        <div class="skill-item" onclick="toggleSkill(this)">
+                                            <i class="bi bi-gear"></i>
+                                            <div>Mekanik</div>
+                                        </div>
+                                        <div class="skill-item" onclick="toggleSkill(this)">
+                                            <i class="bi bi-palette"></i>
+                                            <div>Desain</div>
+                                        </div>
+                                        <div class="skill-item" onclick="toggleSkill(this)">
+                                            <i class="bi bi-diagram-3"></i>
+                                            <div>Logika</div>
+                                        </div>
+                                        <div class="skill-item" onclick="toggleSkill(this)">
+                                            <i class="bi bi-people"></i>
+                                            <div>Teamwork</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="pengalaman" class="form-label">Pengalaman di bidang robotika (jika ada)</label>
+                                    <textarea class="form-control" id="pengalaman" rows="3" placeholder="Ceritakan pengalaman atau project yang pernah kamu kerjakan..."></textarea>
+                                </div>
+
+                                <div class="d-flex justify-content-between mt-4">
+                                    <button type="button" class="btn btn-secondary-custom" onclick="previousStep(1)">
+                                        <i class="bi bi-arrow-left"></i> Kembali
+                                    </button>
+                                    <button type="button" class="btn btn-cyber" onclick="nextStep(3)">
+                                        Lanjut <i class="bi bi-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Step 3: Motivasi -->
+                            <div class="form-section" id="section3">
+                                <h3 class="mb-4">Motivasi & Komitmen</h3>
+                                <div class="mb-4">
+                                    <label for="alasan" class="form-label">Mengapa kamu ingin bergabung dengan Robotik SMEKTI? <span class="required">*</span></label>
+                                    <textarea class="form-control" id="alasan" rows="4" required placeholder="Ceritakan alasan dan motivasimu..."></textarea>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="kontribusi" class="form-label">Kontribusi apa yang bisa kamu berikan untuk tim?</label>
+                                    <textarea class="form-control" id="kontribusi" rows="3" placeholder="Jelaskan kemampuan atau ide yang bisa kamu kontribusikan..."></textarea>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="target" class="form-label">Target atau goal yang ingin kamu capai</label>
+                                    <textarea class="form-control" id="target" rows="3" placeholder="Apa yang ingin kamu capai dengan bergabung di robotik?"></textarea>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Komitmen Waktu <span class="required">*</span></label>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="komitmen1" required>
+                                        <label class="form-check-label" for="komitmen1">
+                                            Saya bersedia mengikuti latihan rutin (Senin & Kamis, 15:00-17:00)
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="komitmen2" required>
+                                        <label class="form-check-label" for="komitmen2">
+                                            Saya siap berpartisipasi dalam kompetisi dan event tim
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="komitmen3" required>
+                                        <label class="form-check-label" for="komitmen3">
+                                            Saya akan menjaga nama baik tim dan sekolah
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between mt-4">
+                                    <button type="button" class="btn btn-secondary-custom" onclick="previousStep(2)">
+                                        <i class="bi bi-arrow-left"></i> Kembali
+                                    </button>
+                                    <button type="button" class="btn btn-cyber" onclick="nextStep(4)">
+                                        Lanjut <i class="bi bi-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Step 4: Konfirmasi -->
+                            <div class="form-section" id="section4">
+                                <h3 class="mb-4">Konfirmasi Data</h3>
+                                <div class="alert alert-info mb-4">
+                                    <i class="bi bi-info-circle"></i> Pastikan semua data yang kamu masukkan sudah benar sebelum mengirim.
+                                </div>
+                                <div id="summaryData" class="mb-4">
+                                    <!-- Summary will be populated by JavaScript -->
+                                </div>
+                                <div class="form-check mb-4">
+                                    <input class="form-check-input" type="checkbox" id="konfirmasi" required>
+                                    <label class="form-check-label" for="konfirmasi">
+                                        Saya menyatakan bahwa data yang saya berikan adalah benar dan saya siap mengikuti seleksi
+                                    </label>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <button type="button" class="btn btn-secondary-custom" onclick="previousStep(3)">
+                                        <i class="bi bi-arrow-left"></i> Kembali
+                                    </button>
+                                    <button type="submit" class="btn btn-cyber" id="submitBtn">
+                                        <i class="bi bi-send"></i> Kirim Pendaftaran
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Success Message -->
+                            <div class="form-section" id="successSection">
+                                <div class="success-animation">
+                                    <div class="success-icon">
+                                        <div class="success-circle"></div>
+                                        <svg class="success-checkmark" viewBox="0 0 52 52">
+                                            <path d="M14 27 L22 35 L38 19" />
+                                        </svg>
+                                    </div>
+                                    <h3 class="text-success mb-3">Pendaftaran Berhasil!</h3>
+                                    <p class="lead mb-4">Terima kasih telah mendaftar sebagai anggota Robotik SMEKTI.</p>
+                                    <div class="alert alert-dark">
+                                        <p class="mb-2"><strong>Langkah selanjutnya:</strong></p>
+                                        <ol class="mb-0 text-start">
+                                            <li>Tim kami akan menghubungi kamu melalui WhatsApp dalam 2-3 hari kerja</li>
+                                            <li>Persiapkan diri untuk tes seleksi (wawancara & tes praktik)</li>
+                                            <li>Pantau terus informasi di grup WhatsApp calon anggota</li>
+                                        </ol>
+                                    </div>
+                                    <a href="index.html" class="btn btn-cyber mt-4">
+                                        <i class="bi bi-house"></i> Kembali ke Beranda
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        let currentStep = 1;
+        const totalSteps = 4;
+
+        // Navigation Functions
+        function nextStep(step) {
+            if (validateStep(currentStep)) {
+                showStep(step);
+            }
+        }
+
+        function previousStep(step) {
+            showStep(step);
+        }
+
+        function showStep(step) {
+            // Update sections
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(`section${step}`).classList.add('active');
+
+            // Update progress steps
+            document.querySelectorAll('.step').forEach((stepEl, index) => {
+                stepEl.classList.remove('active', 'completed');
+                if (index + 1 < step) {
+                    stepEl.classList.add('completed');
+                } else if (index + 1 === step) {
+                    stepEl.classList.add('active');
+                }
+            });
+
+            // Update progress line
+            const progressLine = document.querySelector('.progress-line-active');
+            const progress = ((step - 1) / (totalSteps - 1)) * 100;
+            progressLine.style.width = progress + '%';
+
+            currentStep = step;
+
+            // If showing confirmation step, populate summary
+            if (step === 4) {
+                populateSummary();
+            }
+        }
+
+        // Validation
+        function validateStep(step) {
+            const section = document.getElementById(`section${step}`);
+            const requiredFields = section.querySelectorAll('[required]');
+            let isValid = true;
+
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+
+            if (step === 2) {
+                // Check if at least one competition is selected
+                const competitions = section.querySelectorAll('input[type="checkbox"]:checked');
+                if (competitions.length === 0) {
+                    alert('Pilih minimal satu kompetisi yang kamu minati!');
+                    isValid = false;
+                }
+            }
+
+            return isValid;
+        }
+
+        // Toggle Skill Selection
+        function toggleSkill(element) {
+            element.classList.toggle('selected');
+        }
+
+        // Populate Summary
+        function populateSummary() {
+            const nama = document.getElementById('nama').value;
+            const kelas = document.getElementById('kelas').value;
+            const jurusan = document.getElementById('jurusan').value;
+            const email = document.getElementById('email').value;
+            const whatsapp = document.getElementById('whatsapp').value;
+
+            const competitions = [];
+            document.querySelectorAll('#section2 input[type="checkbox"]:checked').forEach(cb => {
+                competitions.push(cb.nextElementSibling.textContent.trim());
+            });
+
+            const skills = [];
+            document.querySelectorAll('.skill-item.selected').forEach(skill => {
+                skills.push(skill.textContent.trim());
+            });
+
+            const summaryHTML = `
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <strong>Nama:</strong><br>${nama}
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Kelas & Jurusan:</strong><br>${kelas} - ${jurusan}
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Email:</strong><br>${email}
+                    </div>
+                    <div class="col-md-6">
+                        <strong>WhatsApp:</strong><br>${whatsapp}
+                    </div>
+                    <div class="col-12">
+                        <strong>Minat Kompetisi:</strong><br>
+                        ${competitions.join(', ') || '-'}
+                    </div>
+                    <div class="col-12">
+                        <strong>Skills:</strong><br>
+                        ${skills.join(', ') || '-'}
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('summaryData').innerHTML = summaryHTML;
+        }
+
+        // Form Submission
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.innerHTML = '<span class="spinner"></span> Mengirim...';
+            submitBtn.disabled = true;
+
+            // Simulate form submission
+            setTimeout(() => {
+                // Hide all sections
+                document.querySelectorAll('.form-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Show success message
+                document.getElementById('successSection').classList.add('active');
+                
+                // Hide progress steps
+                document.querySelector('.progress-steps').style.display = 'none';
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 2000);
+        });
+
+        // Add input formatting for WhatsApp number
+        document.getElementById('whatsapp').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 0) {
+                if (value.length <= 4) {
+                    value = value;
+                } else if (value.length <= 8) {
+                    value = value.slice(0, 4) + '-' + value.slice(4);
+                } else {
+                    value = value.slice(0, 4) + '-' + value.slice(4, 8) + '-' + value.slice(8, 12);
+                }
+            }
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html>
